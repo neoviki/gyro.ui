@@ -13,6 +13,7 @@ var scale_factor=6;
 var fx=0, fy=0, fz=0;
 var axes_length=100;
 var axes;
+var old_gx, old_gy, old_gz;
 
 function init_perspective_camera()
 {
@@ -227,11 +228,33 @@ function degree2rad(angle)
     return radians;	
 }
 
+
 function update_flight_position_sensor(gx, gy, gz)
 {
+    var o, n;
     if (mesh) {
-		 mesh.rotation.set(degree2rad(gx), degree2rad(gy), degree2rad(gz));
-	}
+         o = old_gx; n = gx;
+
+         for(i=o;i<=n; i++){
+		    mesh.rotation.set(degree2rad(i), degree2rad(old_gy), degree2rad(old_gz));
+         }
+
+        o = old_gy; n = gy;
+
+         for(i=o;i<=n; i++){
+		    mesh.rotation.set(degree2rad(gx), degree2rad(i), degree2rad(old_gz));
+         }
+
+        o = old_gz; n = gz;
+
+         for(i=o;i<=n; i++){
+		    mesh.rotation.set(degree2rad(gx), degree2rad(gy), degree2rad(i));
+         }
+        
+        old_gx = gx;
+        old_gy = gy;
+        old_gz = gz;
+    }
 }
 
 

@@ -136,7 +136,8 @@ function update_gyro_values(gyro_values)
 {
     var i, tmp;
     var index = "";
-    
+   
+    /*
     dis="gyro_values[0] = "+gyro_values[0];
 	console.log(dis);
     dis="gyro_values[1] = "+gyro_values[1];
@@ -146,7 +147,7 @@ function update_gyro_values(gyro_values)
     tmp=gyro_values.length;
     dis="gyro_values.length = "+tmp.toString();
 	console.log(dis);
-
+    */
 
     if(gyro_values.length < 4){
         return;
