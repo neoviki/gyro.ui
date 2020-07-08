@@ -132,127 +132,48 @@ function html_textarea_scroll(id){
     document.getElementById(id).scrollTop = document.getElementById(id).scrollHeight
 }
 
-function update_left_grid(pixel_reading_array)
+function update_gyro_values(gyro_values)
 {
     var i, tmp;
     var index = "";
-    var pixel_id = "";
     
-    
-    dis="pixel[0] = "+pixel_reading_array[0];
+    dis="gyro_values[0] = "+gyro_values[0];
 	console.log(dis);
-    /*
-    dis="pixel[1] = "+pixel_reading_array[1];
+    dis="gyro_values[1] = "+gyro_values[1];
 	console.log(dis);
-    dis="pixel[2] = "+pixel_reading_array[2];
+    dis="gyro_values[2] = "+gyro_values[2];
 	console.log(dis);
-    tmp=pixel_reading_array.length;
-    dis="pixel_reading_array.length = "+tmp.toString();
+    tmp=gyro_values.length;
+    dis="gyro_values.length = "+tmp.toString();
 	console.log(dis);
-    */
 
-    var red=0;
-    var green=128;
-    var blue=0;
-    var color;
 
-    for(i=1; i<pixel_reading_array.length; i++){
-
-        if(i>64){
-            break;
-        }
-        tmp = i;
-        index = tmp.toString();
-        pixel_id = "pxL_"+index;
-        var element = document.getElementById(pixel_id);
-        var temperature = Number(pixel_reading_array[i]);
-       
-        if( temperature > 128 ){ //HOT - RED
-            red = Math.floor(temperature) + 40;
-            if(red > 255){
-                red = 255;
-            }
-            blue = 0;
-        }else{ //COLD - BLUE
-            red = 0;
-            blue = temperature + 100;
-
-            if(blue > 255){
-                blue = 255;
-            }
-
-        }
-        
-        color=rgb2hex(red,green,blue);
-        element.style.backgroundColor=color;
-        element.innerText = pixel_reading_array[i]; 
+    if(gyro_values.length < 4){
+        return;
     }
-
-}
-
-
-function update_right_grid(pixel_reading_array)
-{
-    var i, tmp;
-    var index = "";
-    var pixel_id = "";
     
-    
-    dis="pixel[0] = "+pixel_reading_array[0];
-	console.log(dis);
-    /*
-    dis="pixel[1] = "+pixel_reading_array[1];
-	console.log(dis);
-    dis="pixel[2] = "+pixel_reading_array[2];
-	console.log(dis);
-    tmp=pixel_reading_array.length;
-    dis="pixel_reading_array.length = "+tmp.toString();
-	console.log(dis);
-    */
+    var gx = Number(gyro_values[1]);
+    var gy = Number(gyro_values[2]);
+    var gz = Number(gyro_values[3]);
 
-    for(i=1; i<pixel_reading_array.length; i++){
-
-        if(i>64){
-            break;
-        }
-
-        tmp = i;
-        index = tmp.toString();
-        pixel_id = "pxR_"+index;
-        var element = document.getElementById(pixel_id);
-        element.innerText = pixel_reading_array[i]; 
-    }
-
+    air.update_flight_position_sensor(gx, gy, gz);
 }
 
 function html_serial_data_display(data)
 {
 	/*write to text area*/
     var incoming_str = data.toString();
-    var ret = incoming_str.includes("GRID_EYE");
+    var ret = incoming_str.includes("GYRO");
 
     if(ret == false){
         return;
     }
 	
-    console.log("Grid Eye Data Arrived\n");
+    console.log("Gyro Data Arrived\n");
 
-    /* Incoming Data Ordering */
-    /*
-        1   2   3   4   5   6   7   8
-        9   10  11  12  13  14  15  16
-        
-        .   .   .   .   .   .   .   . 
-        
-        .   .   .   .   .   .   .   .
-        
-        57  58  59  60  61  62  63  64   
-     
-     */
-    var grid_eye_values = incoming_str.split("#");
+    var gyro_values = incoming_str.split("#");
 
-    update_left_grid(grid_eye_values);
-    update_right_grid(grid_eye_values);
+    update_gyro_values(gyro_values);
     //html_textarea_append('id_serial_reader', data);
 }
 

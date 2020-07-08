@@ -227,6 +227,14 @@ function degree2rad(angle)
     return radians;	
 }
 
+function update_flight_position_sensor(gx, gy, gz)
+{
+    if (mesh) {
+		 mesh.rotation.set(degree2rad(gx), degree2rad(gy), degree2rad(gz));
+	}
+}
+
+
 function update_flight_position()
 {
     if (mesh) {
@@ -269,10 +277,10 @@ function yaw_test_env_setup()
 function animate()
 {
     //stats.update();
-	update_flight_position();
+	//update_flight_position();
 	//pitch(0.1);
 	//roll(0.1);
-	yaw(0.1);
+	//yaw(0.1);
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
 }
@@ -291,3 +299,4 @@ function display_3d_model(){
 }
 
 module.exports.display_3d_model = display_3d_model;
+module.exports.update_flight_position_sensor = update_flight_position_sensor;
